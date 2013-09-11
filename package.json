@@ -1,0 +1,13 @@
+{
+    "name": "",
+    "version": "",
+    "author":"Ryan Latta <recursive.faults@gmail.com>",
+    "description":"",
+    "scripts": {
+        "start":"coffee server.coffee",
+        "test":""
+    },
+    "dependencies": {
+        "coffee-script": "*"
+    }
+}
