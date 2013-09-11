@@ -18,7 +18,17 @@ class Parser
 
         final += "\r\n#{@player.prompt} "
 
-
+class Creature
+    constructor: () ->
+        @hd = 0
+        @hdMod = 0
+        @stats= {str: 0, dex:0, int: 0, con: 0, wis:0, cha:0}
+        @saves= {}
+        @class = null
+    generate: () ->
+        for v in @stats
+            console.log v
+            v = diceRoller("3d6")
 
 
 class Player
@@ -35,3 +45,16 @@ class Player
         @socket.close()
 
 exports.Player = Player
+exports.Parser = Parser
+exports.diceRoller = (expression) ->
+    parsed = /(\d+)d(\d+)([+-]\d+){0,1}/.exec expression
+    numDice = parsed[1]
+    diceSize = parsed[2]
+    mod = 0
+    if parsed[3]?
+        mod = parseInt(parsed[3])
+    total = 0
+    for i in [0...numDice]
+        total += Math.floor(Math.random() * (diceSize - 1) + 1)
+    total += mod
+    return total
