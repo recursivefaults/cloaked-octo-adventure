@@ -1,8 +1,8 @@
 event = require('events')
 class BaseObject extends event.EventEmitter
-    constructor: () ->
-        @name = "Undefined"
-        @description = "Undefined"
+    constructor: (hash) ->
+        @name = hash?.name || "Undefined"
+        @description = hash?.description || "Undefined"
         @contents = []
         super()
     addItem: (object) ->
@@ -17,10 +17,9 @@ class BaseObject extends event.EventEmitter
         string
     
 class Room extends BaseObject
-    constructor: () ->
-        @description = ""
+    constructor: (hash) ->
         @connections = {}
-        super()
+        super(hash)
 
     up: () ->
         @connections.up
