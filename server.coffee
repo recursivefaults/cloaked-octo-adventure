@@ -1,6 +1,6 @@
 net = require 'net'
-player = require './player'
-world = require './world'
+player = require './libs/player'
+world = require './libs/world'
 
 players = []
 
