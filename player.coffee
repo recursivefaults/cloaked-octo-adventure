@@ -8,6 +8,14 @@ class Parser
         final = switch 
             when string.match(/help/)
                 {output: "Not implemented"}
+            when string.match(/(look|ex|examine) (\w+)/)
+                results = string.match(/(look|ex|examine) (.+)/)
+                console.log results
+                lookedAt = results[2]
+                target = @player.room.find(lookedAt)
+                {output: target?.toString() || "Sorry, look at what?"}
+            when string.match(/(look|ex|examine)/)
+                {output: target?.toString() || "Sorry, look at what?"}
             when string.match(/quit/)
                 {output: "Goodbye!", execute: => @player.disconnect()}
             else
@@ -29,19 +37,25 @@ class Creature
     generate: () ->
         for k, v of @stats
             @stats[k] = diceRoller("3d6")
-        console.log "Generate"
-        console.log @stats
+        @hp = diceRoller("#{@hd}d8+#{@hdMod}")
 
 class Monster extends Creature
     constructor: (hash) ->
         @xp = hash?.xp || 0
         super(hash)
+    toString: () ->
+        "#{@name}\r\n
+        #{@description? || ''}\r\n
+        HP: #{@hp}\r\n
+        HD: #{@hd} + #{@hdMod}\r\n
+        AC: #{@ac}\r\n\r\n"
+
 
 
 
 class Player
-    constructor: (@socket, hash) ->
-        console.log "init"
+    constructor: (@socket, @room) ->
+        @name = "The Player"
         @prompt = ">"
         @parser = new Parser(@)
         @setupSocket()
@@ -55,6 +69,8 @@ class Player
 
     disconnect: () ->
         @socket.end()
+    toString: () ->
+        "The Player\r\n"
 
 diceRoller = (expression) ->
     parsed = /(\d+)d(\d+)([+-]\d+){0,1}/.exec expression

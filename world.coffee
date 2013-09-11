@@ -9,7 +9,10 @@ class BaseObject extends event.EventEmitter
         @contents.push(object)
     removeItem: (object) ->
         @contents.slice(@contents.indexOf(object), 1)
-        
+    find: (identifier) ->
+        for i in @contents
+            return i if i.name == identifier
+        null
     toString: () ->
         string = "#{@name}\r\n\r\n#{@description}\r\n"
         for item in @contents
