@@ -4,7 +4,7 @@
     "author":"Ryan Latta <recursive.faults@gmail.com>",
     "description":"",
     "scripts": {
-        "start":"coffee server.coffee",
+        "start":"node_modules/.bin/coffee server.coffee",
         "test":"node_modules/.bin/vows test/*"
     },
     "dependencies": {

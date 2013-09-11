@@ -50,9 +50,6 @@ class Monster extends Creature
         HD: #{@hd} + #{@hdMod}\r\n
         AC: #{@ac}\r\n\r\n"
 
-
-
-
 class Player
     constructor: (@socket, @room) ->
         @name = "The Player"
