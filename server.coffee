@@ -1,7 +1,6 @@
 net = require 'net'
 player = require './libs/player'
 world = require './libs/world'
-mongo = require 'mongodb'
 
 players = []
 
@@ -17,7 +16,6 @@ server = net.createServer (socket) ->
     monster.generate()
     theRoom.addItem(monster)
     players.push(new player.Player(socket, theRoom))
-    socket.write(theRoom.toString())
     theRoom.addItem(player)
 
 server.listen 1337, '127.0.0.1'
