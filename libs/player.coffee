@@ -1,3 +1,4 @@
+utility = require './utility'
 class Parser
     constructor: (@player)->
 
@@ -36,8 +37,8 @@ class Creature
         @name = hash?.name || "Unnamed"
     generate: () ->
         for k, v of @stats
-            @stats[k] = diceRoller("3d6")
-        @hp = diceRoller("#{@hd}d8+#{@hdMod}")
+            @stats[k] = utility.diceRoller("3d6")
+        @hp = utility.diceRoller("#{@hd}d8+#{@hdMod}")
 
 class Monster extends Creature
     constructor: (hash) ->
@@ -69,19 +70,6 @@ class Player
     toString: () ->
         "The Player\r\n"
 
-diceRoller = (expression) ->
-    parsed = /(\d+)d(\d+)([+-]\d+){0,1}/.exec expression
-    numDice = parsed[1]
-    diceSize = parsed[2]
-    mod = 0
-    if parsed[3]?
-        mod = parseInt(parsed[3])
-    total = 0
-    for i in [0...numDice]
-        total += Math.floor(Math.random() * (diceSize - 1) + 1)
-    total += mod
-    return total
 exports.Player = Player
 exports.Monster = Monster
 exports.Parser = Parser
-exports.diceRoller = diceRoller

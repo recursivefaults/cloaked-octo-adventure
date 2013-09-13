@@ -1,6 +1,7 @@
 net = require 'net'
 player = require './libs/player'
 world = require './libs/world'
+mongo = require 'mongodb'
 
 players = []
 

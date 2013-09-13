@@ -9,6 +9,7 @@
     },
     "dependencies": {
         "coffee-script": "*",
-        "vows": "*"
+        "vows": "*",
+        "mongodb": "*"
     }
 }

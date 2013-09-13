@@ -1,6 +1,6 @@
 vows = require 'vows'
 assert = require 'assert'
-world = require '../world'
+world = require '../libs/world'
 
 vows.describe('object')
     .addBatch(

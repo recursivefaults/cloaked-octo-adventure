@@ -1,6 +1,6 @@
 vows = require 'vows'
 assert = require 'assert'
-player = require '../player'
+player = require '../libs/utility'
 
 vows.describe('diceRoller')
     .addBatch(

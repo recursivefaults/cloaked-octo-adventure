@@ -8,6 +8,8 @@ lib-cov
 *.gz
 *.swp*
 *.un*
+
+db
 node_modules
 
 pids
