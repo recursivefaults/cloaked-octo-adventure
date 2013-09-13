@@ -1,4 +1,5 @@
 model = require './model'
+crypto = require 'crypto'
 
 class ContextualParser
     constructor: (@player) ->
@@ -51,11 +52,11 @@ class LoginParser extends ContextualParser
                 @status = 1
                 {output: 'Enter your registered email address: ', prompt: ""}
             when value == 2 and @status == 0
-                @isRegister = true
-                {output: ''}
+                {output: '', execute: => @player.switchParser(new RegistrationParser))}
             when value == 3 and @status == 0
                 {output: 'Goodbye!', execute: => @player.disconnect}
             when @status == 1
+
                 @status = 2
                 users.findOne({email: buffer.toString}, (err, result) =>
                     throw err if err
@@ -65,13 +66,58 @@ class LoginParser extends ContextualParser
                 {output: "Password: ", prompt: ""}
             when @status == 2
                 ## Hash that mess up.
-                @isFinished = true
-                {output: "Welcome!", execute: => @player.switchParser(new GeneralParser(@player))}
+                hash = crypto.createHash('sha256')
+                pHash = hash.digest(buffer.toString())
+                console.log @tempUser
+                if !@tempUser? or @tempUser.password != pHash
+                    console.log "Invalid credentials"
+                    {output: "Invalid credentials, sorry\r\n", prompt:"Password: "}
+                else
+                    {output: "Welcome!", execute: => @player.switchParser(new GeneralParser(@player))}
+            else
+                @output
         output
 
+class RegistrationParser extends Contextualparser
+    constructor:(@player) ->
+        super(@player)
+        @status = 0
+        @userObject = {}
+    setUp: () ->
+        super()
+        "Enter your email address: "
+
+    parse: (buffer) ->
+        users = new model.SimpleModel('users')
+        input = buffer.toString()
+        output = @output
+        switch @state
+            when 0
+                #Is the email taken
+                @userObject.email = input
+                users.findOne(email: input, (err, result) =>
+                    if result?
+                        output.output = "Sorry, that address is taken"
+                    else
+                        @state += 1
+                        output.output = "Password: "
+                        
+                )
+
+                output.prompt = ""
+                @state += 1
+            when 1
+                @userObject.password = input
+                
+
+
+        output
 
         
 class GeneralParser extends ContextualParser
+    setUp: () ->
+        super()
+        @player.room.toString()
 
     parse: (buffer) ->
         string = buffer.toString()
